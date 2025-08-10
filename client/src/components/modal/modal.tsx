@@ -60,7 +60,11 @@ export const Modal = ({ open, onClose, children }: ModalProps) => {
                 e.stopPropagation();
               }}
             >
-              <XIcon className={styles.close} onClick={onClose} />
+              <XIcon
+                data-testid="close-icon"
+                className={styles.close}
+                onClick={onClose}
+              />
 
               <div className={cx(styles.content)}>{children}</div>
             </motion.div>

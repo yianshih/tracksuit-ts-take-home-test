@@ -1,20 +1,27 @@
-import { useEffect, useState } from "react";
 import { Header } from "../components/header/header.tsx";
 import { Insights } from "../components/insights/insights.tsx";
 import styles from "./app.module.css";
-import type { Insight } from "../schemas/insight.ts";
+import { useGetInsights } from "../common/hooks/insights/get-insights.ts";
 
 export const App = () => {
-  const [insights, setInsights] = useState<Insight>([]);
+  const { data: insights, isError, isLoading } = useGetInsights();
 
-  useEffect(() => {
-    fetch(`/api/insights`).then((res) => setInsights(res.json()));
-  }, []);
+  const renderInsights = () => {
+    if (isError) {
+      return <p>Error loading insights</p>;
+    }
+
+    if (isLoading) {
+      return <p>Loading insights...</p>;
+    }
+
+    return <Insights className={styles.insights} insights={insights} />;
+  };
 
   return (
     <main className={styles.main}>
       <Header />
-      <Insights className={styles.insights} insights={insights} />
+      {renderInsights()}
     </main>
   );
 };
