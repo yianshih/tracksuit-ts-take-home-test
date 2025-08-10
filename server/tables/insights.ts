@@ -1,3 +1,5 @@
+import type { Insight } from "$models/insight.ts";
+
 export const createTable = `
   CREATE TABLE insights (
     id INTEGER PRIMARY KEY ASC NOT NULL,
@@ -7,18 +9,9 @@ export const createTable = `
   )
 `;
 
-export type Row = {
-  id: number;
-  brand: number;
-  createdAt: string;
-  text: string;
-};
+export type Row = Insight;
 
-export type Insert = {
-  brand: number;
-  createdAt: string;
-  text: string;
-};
+export type InsertItem = Omit<Row, "id">;
 
-export const insertStatement = (item: Insert) =>
-  `INSERT INTO insights (brand, createdAt, text) VALUES (${item.brand}, '${item.createdAt}', '${item.text}')`;
+export const insertStatement = (item: InsertItem) =>
+  `INSERT INTO insights (brand, createdAt, text) VALUES (${item.brand}, '${item.createdAt.toISOString()}', '${item.text}')`;

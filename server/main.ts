@@ -5,6 +5,8 @@ import * as path from "@std/path";
 import { Port } from "../lib/utils/index.ts";
 import listInsights from "./operations/list-insights.ts";
 import lookupInsight from "./operations/lookup-insight.ts";
+import createInsight from "./operations/create-insight.ts";
+import deleteInsight from "./operations/delete-insight.ts";
 
 console.log("Loading configuration");
 
@@ -15,6 +17,8 @@ const env = {
 const dbFilePath = path.resolve("tmp", "db.sqlite3");
 
 console.log(`Opening SQLite database at ${dbFilePath}`);
+
+// TODO: Move all routes into separate folder with its configuration
 
 await Deno.mkdir(path.dirname(dbFilePath), { recursive: true });
 const db = new Database(dbFilePath);
@@ -31,7 +35,7 @@ router.get("/_health", (ctx) => {
 router.get("/insights", (ctx) => {
   const result = listInsights({ db });
   ctx.response.body = result;
-  ctx.response.body = 200;
+  ctx.response.status = oak.Status.OK;
 });
 
 router.get("/insights/:id", (ctx) => {
@@ -41,12 +45,18 @@ router.get("/insights/:id", (ctx) => {
   ctx.response.status = 200;
 });
 
-router.get("/insights/create", (ctx) => {
-  // TODO
+router.post("/insights/create", async (ctx) => {
+  ctx.response.body = createInsight({
+    db,
+    item: await ctx.request.body.json(),
+  });
+  ctx.response.status = oak.Status.Created;
 });
 
-router.get("/insights/delete", (ctx) => {
-  // TODO
+router.delete("/insights/delete/:id", (ctx) => {
+  const params = ctx.params as Record<string, any>;
+  deleteInsight({ db, id: params.id });
+  ctx.response.status = oak.Status.NoContent;
 });
 
 const app = new oak.Application();
