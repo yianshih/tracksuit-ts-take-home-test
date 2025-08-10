@@ -4,6 +4,7 @@ import type * as insightsTable from "$tables/insights.ts";
 
 type Input = HasDBClient;
 
+// TODO: Support filtering and Pagination
 export default (input: Input): Insight[] => {
   console.log("Listing insights");
 
@@ -14,6 +15,5 @@ export default (input: Input): Insight[] => {
     createdAt: new Date(row.createdAt),
   }));
 
-  console.log("Retrieved insights successfully: ", result);
   return result;
 };

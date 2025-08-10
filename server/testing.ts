@@ -1,11 +1,11 @@
 import { Database } from "@db/sqlite";
 import * as insightsTable from "$tables/insights.ts";
-import { HasDBClient } from "./shared.ts";
+import type { HasDBClient } from "./shared.ts";
 import { afterAll, beforeAll } from "@std/testing/bdd";
 
 type Fixture = HasDBClient & {
   insights: {
-    insert(insights: insightsTable.Insert[]): void;
+    insert(insights: insightsTable.InsertItem[]): void;
     selectAll(): insightsTable.Row[];
   };
 };
