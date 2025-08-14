@@ -11,7 +11,7 @@ export const createTable = `
 
 export type Row = Insight;
 
-export type InsertItem = Omit<Row, "id">;
+export type InsertItem = Omit<Row, "id" | "createdAt">;
 
-export const insertStatement = (item: InsertItem) =>
+export const insertStatement = (item: Omit<Row, "id">) =>
   `INSERT INTO insights (brand, createdAt, text) VALUES (${item.brand}, '${item.createdAt.toISOString()}', '${item.text}')`;
