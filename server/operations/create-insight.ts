@@ -13,7 +13,7 @@ export default (input: Input): Insight | undefined => {
 
   const [row] = input.db.sql<insightsTable.Row>`
     INSERT INTO insights (brand, text, createdAt)
-    VALUES (${item.brand}, ${item.text}, ${item.createdAt.toISOString()})
+    VALUES (${item.brand}, ${item.text}, ${new Date().toISOString()})
     RETURNING *
   `;
 
